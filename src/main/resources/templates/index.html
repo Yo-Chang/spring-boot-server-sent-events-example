@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>SSE Demo</title>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+</head>
+<body>
+    <h1>Notifications: </h1>
+    <div id="notificationDiv"></div>
+</body>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+    var subscribe = function(){
+        var url = "/api/sse-notification";
+        var sseClient = new EventSource(url);
+
+        sseClient.onmessage = function (msg) {
+            var notification = msg.data;
+            // var notification = JSON.parse(msg.data);
+            document.getElementById("notificationDiv").innerHTML += notification + "<br/>";
+        };
+    }
+
+    window.onload = subscribe;
+    window.onbeforeunload = function() {
+        sseClient.close();
+    }
+
+/*]]>*/
+</script>
+</html>
